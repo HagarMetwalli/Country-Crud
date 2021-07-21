@@ -1,0 +1,66 @@
+﻿@model Core.Country
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="text-center m-auto align-content-center">
+    <h1>Details</h1>
+    <table class="table table-bordered table-striped w-50 text-center m-auto" id="myTbl"></table>
+    <div>
+        <a asp-controller="Home" asp-action="Countries" class="btn btn-info my-3" ><< Back to List</a>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/lib/datatables/js/jquery.dataTables.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+    <script>
+    $.ajax({
+        type: "GET",
+        url: "https://demotestapi.catalist-me.com/api/Country/GetAllCountries/?CountryId=" + @ViewBag.id,
+        headers: { "Authorization": "Bearer " + localStorage.getItem("usertoken") },
+        data: '',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var response = response.response.countries[0];
+            //console.log(response["id"]);
+            $("#myId").val(response["id"]);
+            //return ''
+            $("#myTbl").append(
+                `<tr>
+                    <td class="col-sm-2" >ID</td>
+                    <td class="col-sm-10" >`
+                + response["id"] + `</td></tr>
+                <tr>
+                    <td class="col-sm-2" >Name</td>
+                    <td class="col-sm-10" >`
+                + response["countryName"] + `</td></tr>
+                <tr>
+                    <td class="col-sm-2" >Language</td>
+                    <td class="col-sm-10" >`
+                + response["languageName"] + `</td></tr>
+                <tr>
+                    <td class="col-sm-2" >CreatedDate</td>
+                    <td class="col-sm-10" >`
+                + response["createdDate"] + `</td></tr>
+                <tr>
+                    <td class="col-sm-2" >Active</td>
+                    <td class="col-sm-10" >`
+                + response["active"] + `</td></tr>
+`
+            );
+
+        },
+        failure: function (response) {
+            alert(response.d);
+        },
+        error: function (response) {
+            alert(response.d);
+        }
+    });
+    </script>
+}

@@ -1,0 +1,152 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<style>
+    body {
+        padding-top: 4.2rem;
+        padding-bottom: 4.2rem;
+        background: rgba(0, 0, 0, 0.76);
+    }
+
+    a {
+        text-decoration: none !important;
+    }
+
+    h1, h2, h3 {
+        font-family: 'Kaushan Script', cursive;
+    }
+
+    .myform {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        padding: 1rem;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.2);
+        border-radius: 1.1rem;
+        outline: 0;
+        max-width: 500px;
+    }
+
+    .tx-tfm {
+        text-transform: uppercase;
+    }
+
+    .mybtn {
+        border-radius: 50px;
+    }
+
+    .login-or {
+        position: relative;
+        color: #aaa;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .span-or {
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: -2px;
+        margin-left: -25px;
+        background-color: #fff;
+        width: 50px;
+        text-align: center;
+    }
+
+    .hr-or {
+        height: 1px;
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+
+
+    form .error {
+        color: #ff0000;
+    }
+
+    #second {
+        display: none;
+    }
+</style>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<script>
+
+    function login() {
+
+        var userName = $("#userName").val();
+        var password = $("#password").val();
+        localStorage.removeItem("usertoken");
+        $.ajax({
+            method: "POST",
+            url: "https://demotestapi.catalist-me.com/api/Login/UserSignIn",
+            data: `{
+                    "userName": "`+ userName + `",
+                    "password": "`+ password + `"
+                   }`,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.isSuccess) {
+                    localStorage.setItem("usertoken", response.response.accessToken.toString());
+                    window.location.replace("/home/index");
+                }
+                else {
+                    alert("Unouthrized");
+                }
+            }
+        });
+    }
+
+</script>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 mx-auto">
+                <div id="first">
+                    <div class="card">
+                        <div class="logo mb-3">
+                            <div class="card-header col-md-12 text-center">
+                                <h1>Login</h1>
+                            </div>
+                        </div>
+                        <form class="card-body text-center">
+                            <div class="form-group">
+                                <label for="userName">Username</label>
+                                <input type="text" name="userName" class="form-control" id="userName" aria-describedby="emailHelp" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Password</label>
+                                <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                            </div>
+                            <div class="col-md-12 text-center w-50 m-auto">
+                                <button type="button" onclick="login()" class=" btn btn-block mybtn btn-primary">Login</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
